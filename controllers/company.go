@@ -49,9 +49,33 @@ func (h CompanyController) FetchSingleCompany(c *gin.Context) {
 }
 
 func (h CompanyController) UpdateCompany(c *gin.Context) {
+	var company models.Company
+	companyID := c.Param("id")
 
+	db := db.GetDB()
+	db.First(&company, companyID)
+
+	if company.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No todo found!"})
+		return
+	}
+
+	db.Model(&company).Update("Name", c.PostForm("name"))
+	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "message": "Company updated successfully!"})
 }
 
 func (h CompanyController) DeleteCompany(c *gin.Context) {
+	var company models.Company
+	companyID := c.Param("id")
 
+	db := db.GetDB()
+	db.First(&company, companyID)
+
+	if company.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No todo found!"})
+		return
+	}
+
+	db.Delete(&company)
+	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "message": "Todo deleted successfully!"})
 }
