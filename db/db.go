@@ -17,7 +17,11 @@ func Init() {
 	}
 
 	//Migrate the schema
-	db.AutoMigrate(&models.Company{})
+	db.AutoMigrate(&models.Company{}, &models.Finance{})
+
+	// Add Foreign Keys Manually
+	// Issue: https://github.com/jinzhu/gorm/issues/450
+	db.Model(&models.Finance{}).AddForeignKey("company_id", "companies(company_id)", "RESTRICT", "RESTRICT")
 }
 
 // GetDB returns db

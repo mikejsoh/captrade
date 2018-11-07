@@ -21,6 +21,16 @@ func Init() {
 			companyGroup.PUT("/:id", company.UpdateCompany)
 			companyGroup.DELETE("/:id", company.DeleteCompany)
 		}
+
+		financeGroup := v1.Group("finance")
+		{
+			finance := new(controllers.FinanceController)
+			financeGroup.POST("/", finance.CreateFinance)
+			// financeGroup.GET("/", finance.FetchAllFinance)
+			// financeGroup.GET("/:id", finance.FetchSingleFinance)
+			// financeGroup.PUT("/:id", finance.UpdateFinance)
+			// financeGroup.DELETE("/:id", finance.DeleteFinance)
+		}
 	}
 	router.Run(":8080")
 }
