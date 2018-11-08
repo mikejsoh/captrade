@@ -31,6 +31,17 @@ func Init() {
 			// financeGroup.PUT("/:id", finance.UpdateFinance)
 			// financeGroup.DELETE("/:id", finance.DeleteFinance)
 		}
+
+		carbonMarketGroup := v1.Group("carbonmarket")
+		{
+			carbonMarket := new(controllers.CarbonMarketController)
+			carbonMarketGroup.POST("/", carbonMarket.CreateCarbonMarket)
+			// carbonMarketGroup.GET("/", carbonMarket.FetchAllCarbonMarket)
+			// carbonMarketGroup.GET("/:id", carbonMarket.FetchSingleCarbonMarket)
+			// carbonMarketGroup.PUT("/:id", carbonMarket.UpdateCarbonMarket)
+			// carbonMarketGroup.DELETE("/:id", carbonMarket.DeleteCarbonMarket)
+		}
+
 	}
 	router.Run(":8080")
 }

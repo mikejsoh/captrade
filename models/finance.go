@@ -14,6 +14,6 @@ type (
 		FixedCost           float64 `gorm:"column:fixed_cost" json:"fixedCost" sql:"type:decimal(13,2)"`
 		Profit              float64 `gorm:"column:profit" json:"profit" sql:"type:decimal(13,2)"`
 		PermitID            int     `gorm:"column:permit_id" json:"permitId"`
-		CarbonMarketID      int     `gorm:"column:carbonmarket_id" json:"carbonMarketId"`
+		CarbonMarketID      int     `gorm:"column:carbonmarket_id;not null;foreignkey:ID" json:"carbonMarketId"`
 	}
 )

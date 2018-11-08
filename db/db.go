@@ -2,7 +2,7 @@ package db
 
 import (
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/jinzhu/gorm/dialects/mysql" // needed for now
 	"github.com/mikejsoh/captrade/models"
 )
 
@@ -17,11 +17,12 @@ func Init() {
 	}
 
 	//Migrate the schema
-	db.AutoMigrate(&models.Company{}, &models.Finance{})
+	db.AutoMigrate(&models.Company{}, &models.CarbonMarket{}, &models.Finance{})
 
 	// Add Foreign Keys Manually
 	// Issue: https://github.com/jinzhu/gorm/issues/450
 	db.Model(&models.Finance{}).AddForeignKey("company_id", "companies(company_id)", "RESTRICT", "RESTRICT")
+	db.Model(&models.Finance{}).AddForeignKey("carbonmarket_id", "carbon_markets(id)", "RESTRICT", "RESTRICT")
 }
 
 // GetDB returns db
