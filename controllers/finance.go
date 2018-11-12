@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -51,7 +52,24 @@ func (h FinanceController) CreateFinance(c *gin.Context) {
 
 // FetchAllFinance fetches all financial records
 func (h FinanceController) FetchAllFinance(c *gin.Context) {
+	var finances []models.Finance
+	db := db.GetDB()
 
+	companyID := c.Request.URL.Query().Get("company_id")
+	fmt.Println("Company ID: ", companyID)
+
+	if companyID != "" {
+		db.Where("company_id = ?", companyID).Find(&finances)
+	} else {
+		db.Find(&finances)
+	}
+
+	if len(finances) <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No finances found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": finances})
 }
 
 // FetchSingleFinance fetches a single financial record based on financial id

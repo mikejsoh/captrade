@@ -15,8 +15,8 @@ func Init() {
 		companyGroup := v1.Group("company")
 		{
 			company := new(controllers.CompanyController)
-			companyGroup.POST("/", company.CreateCompany)
-			companyGroup.GET("/", company.FetchAllCompany)
+			companyGroup.POST("", company.CreateCompany)
+			companyGroup.GET("", company.FetchAllCompany)
 			companyGroup.GET("/:id", company.FetchSingleCompany)
 			companyGroup.PUT("/:id", company.UpdateCompany)
 			companyGroup.DELETE("/:id", company.DeleteCompany)
@@ -25,8 +25,8 @@ func Init() {
 		financeGroup := v1.Group("finance")
 		{
 			finance := new(controllers.FinanceController)
-			financeGroup.POST("/", finance.CreateFinance)
-			// financeGroup.GET("/", finance.FetchAllFinance)
+			financeGroup.POST("", finance.CreateFinance)
+			financeGroup.GET("", finance.FetchAllFinance)
 			// financeGroup.GET("/:id", finance.FetchSingleFinance)
 			// financeGroup.PUT("/:id", finance.UpdateFinance)
 			// financeGroup.DELETE("/:id", finance.DeleteFinance)
@@ -36,10 +36,10 @@ func Init() {
 		{
 			carbonMarket := new(controllers.CarbonMarketController)
 			carbonMarketGroup.POST("/", carbonMarket.CreateCarbonMarket)
-			// carbonMarketGroup.GET("/", carbonMarket.FetchAllCarbonMarket)
-			// carbonMarketGroup.GET("/:id", carbonMarket.FetchSingleCarbonMarket)
-			// carbonMarketGroup.PUT("/:id", carbonMarket.UpdateCarbonMarket)
-			// carbonMarketGroup.DELETE("/:id", carbonMarket.DeleteCarbonMarket)
+			carbonMarketGroup.GET("/", carbonMarket.FetchAllCarbonMarket)
+			carbonMarketGroup.GET("/:id", carbonMarket.FetchSingleCarbonMarket)
+			carbonMarketGroup.PUT("/:id", carbonMarket.UpdateCarbonMarket)
+			carbonMarketGroup.DELETE("/:id", carbonMarket.DeleteCarbonMarket)
 		}
 
 	}
