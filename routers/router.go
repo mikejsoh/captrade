@@ -27,9 +27,9 @@ func Init() {
 			finance := new(controllers.FinanceController)
 			financeGroup.POST("", finance.CreateFinance)
 			financeGroup.GET("", finance.FetchAllFinance)
-			// financeGroup.GET("/:id", finance.FetchSingleFinance)
-			// financeGroup.PUT("/:id", finance.UpdateFinance)
-			// financeGroup.DELETE("/:id", finance.DeleteFinance)
+			financeGroup.GET("/:id", finance.FetchSingleFinance)
+			financeGroup.PUT("/:id", finance.UpdateFinance)
+			financeGroup.DELETE("/:id", finance.DeleteFinance)
 		}
 
 		carbonMarketGroup := v1.Group("carbonmarket")

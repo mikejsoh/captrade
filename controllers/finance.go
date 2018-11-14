@@ -50,7 +50,7 @@ func (h FinanceController) CreateFinance(c *gin.Context) {
 
 }
 
-// FetchAllFinance fetches all financial records
+// FetchAllFinance fetches all financial records or by companyId
 func (h FinanceController) FetchAllFinance(c *gin.Context) {
 	var finances []models.Finance
 	db := db.GetDB()
@@ -74,15 +74,75 @@ func (h FinanceController) FetchAllFinance(c *gin.Context) {
 
 // FetchSingleFinance fetches a single financial record based on financial id
 func (h FinanceController) FetchSingleFinance(c *gin.Context) {
+	var finance models.Finance
+	financeID := c.Param("id")
 
+	db := db.GetDB()
+	db.First(&finance, financeID)
+
+	if finance.FinancialID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No finance information found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": finance})
 }
 
 // UpdateFinance updates a single financial record based on financial id
 func (h FinanceController) UpdateFinance(c *gin.Context) {
+	var finance models.Finance
+	financeID := c.Param("id")
 
+	companyID, _ := strconv.Atoi(c.PostForm("companyId"))
+	year, _ := strconv.Atoi(c.PostForm("year"))
+	productionLevel, _ := strconv.Atoi(c.PostForm("productionLevel"))
+	salesPrice, _ := strconv.ParseFloat(c.PostForm("salesPrice"), 64)
+	unitCost, _ := strconv.ParseFloat(c.PostForm("unitCost"), 64)
+	totalProductionCost, _ := strconv.ParseFloat(c.PostForm("totalProdCost"), 64)
+	grossMargin, _ := strconv.ParseFloat(c.PostForm("grossMargin"), 64)
+	fixedCost, _ := strconv.ParseFloat(c.PostForm("fixedCost"), 64)
+	profit, _ := strconv.ParseFloat(c.PostForm("profit"), 64)
+	// permitId, _ := strconv.Atoi(c.PostForm("permitId"))
+	carbonMarketID, _ := strconv.Atoi(c.PostForm("carbonMarketId"))
+	fmt.Println("CarbonMarket: ", carbonMarketID)
+
+	db := db.GetDB()
+	db.First(&finance, financeID)
+
+	if finance.FinancialID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No finance information found!"})
+		return
+	}
+
+	db.Model(&finance).Updates(models.Finance{
+		CompanyID:           companyID,
+		Year:                year,
+		ProductionLevel:     productionLevel,
+		SalesPrice:          salesPrice,
+		UnitCost:            unitCost,
+		TotalProductionCost: totalProductionCost,
+		GrossMargin:         grossMargin,
+		FixedCost:           fixedCost,
+		Profit:              profit,
+		CarbonMarketID:      carbonMarketID,
+	})
+
+	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "message": "Financial information updated successfully!"})
 }
 
 // DeleteFinance deletes financial record based on financial id
 func (h FinanceController) DeleteFinance(c *gin.Context) {
+	var finance models.Finance
+	financeID := c.Param("id")
 
+	db := db.GetDB()
+	db.First(&finance, financeID)
+
+	if finance.FinancialID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No finance information found!"})
+		return
+	}
+
+	db.Delete(&finance)
+	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "message": "Financial information deleted successfully!"})
 }
